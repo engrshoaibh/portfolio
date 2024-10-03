@@ -2,27 +2,15 @@
 const nextConfig = {
     async redirects() {
       return [
-        // Basic redirect
         {
           source: '/about',
           destination: '/',
-          permanent: true,
+          permanent: true,  // redirects /about to /
         },
-        // Wildcard path matching
-        {
-          source: '/blog/:slug',
-          destination: '/news/:slug',
-          permanent: true,
-        },
-        // Catch-all redirect for undefined routes
-        {
-          source: '/:path*',
-          destination: '/',
-          permanent: false, // Can be true if you want it as a permanent redirect (301)
-        },
+        // No need to redirect '/' to '/'
       ];
     },
   };
   
-  export default nextConfig;
+  module.exports = nextConfig;
   
