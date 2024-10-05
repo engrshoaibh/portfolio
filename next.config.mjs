@@ -5,9 +5,9 @@ const nextConfig = {
     async redirects() {
       return [
         {
-          source: '/:path*', // Matches all routes
-          destination: '/',  // Redirects to the homepage
-          permanent: true,   // Indicates a permanent redirect (status 308)
+          source: '/:path*', 
+          destination: '/',  
+          permanent: true,   
         },
       ];
     },

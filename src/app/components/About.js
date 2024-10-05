@@ -38,7 +38,7 @@ const About = () => {
         const timer = setTimeout(handleTyping, typingSpeed);
 
         return () => clearTimeout(timer);
-    }, [text, isDeleting, loopNum, typingSpeed]);
+    }, [text, isDeleting, loopNum, typingSpeed,words]);
 
     useEffect(() => {
         const cursorBlink = setInterval(() => {
