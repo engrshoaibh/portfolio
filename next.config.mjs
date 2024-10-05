@@ -5,9 +5,9 @@ const nextConfig = {
         {
           source: '/about',
           destination: '/',
-          permanent: true,  // redirects /about to /
+          permanent: true, 
         },
-        // No need to redirect '/' to '/'
+       
       ];
     },
   };
