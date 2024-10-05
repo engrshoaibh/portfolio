@@ -1,11 +1,12 @@
 'use client'
 
-import { useEffect, useState,useRef } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import profilePic from '../../../assets/image.png';
-import data from './data'
+import data from './data';
 import gsap from 'gsap';
 
 const { bulletPoints, socialIcons } = data;
+
 const About = () => {
     const imageRef = useRef(null);
     const [text, setText] = useState('');
@@ -14,6 +15,7 @@ const About = () => {
     const [typingSpeed, setTypingSpeed] = useState(150);
     const [showCursor, setShowCursor] = useState(true);
 
+    // Move words outside of the component to avoid re-creation on each render
     const words = ["Software Engineer", "ReactJS Developer", "Research Enthusiast"];
 
     useEffect(() => {
@@ -38,7 +40,7 @@ const About = () => {
         const timer = setTimeout(handleTyping, typingSpeed);
 
         return () => clearTimeout(timer);
-    }, [text, isDeleting, loopNum, typingSpeed,words]);
+    }, [text, isDeleting, loopNum, typingSpeed, words]);
 
     useEffect(() => {
         const cursorBlink = setInterval(() => {
@@ -46,33 +48,30 @@ const About = () => {
         }, 500);
         return () => clearInterval(cursorBlink);
     }, []);
-    
+
     useEffect(() => {
         const animateImage = () => {
             gsap.to(imageRef.current, {
-                y: 10, 
+                y: 10,
                 duration: 1,
-                repeat: -1, 
-                yoyo: true, 
-                ease: 'power1.inOut', 
+                repeat: -1,
+                yoyo: true,
+                ease: 'power1.inOut',
             });
         };
 
         animateImage();
     }, []);
-    
 
     return (
-        
         <div className='flex flex-col md:flex-row bg-white-500 justify-center items-center gap-4 mt-20 mx-20'>
-   
             {/* Text Section */}
             <div className='h-32 flex flex-col flex-1'>
                 <p className='text-white mt-4'>
-                    <span className='font-bold text-[40px] '>Shoaib Hassan</span>
+                    <span className='font-bold text-[40px]'>Shoaib Hassan</span>
                 </p>
                 <p className='text-white text-[35px]'>
-                    I'm a <span className='text-orange-400 font-bold'>{text}</span>
+                    I&apos;m a <span className='text-orange-400 font-bold'>{text}</span>
                     <span className={`text-orange-400 font-bold ${showCursor ? 'inline' : 'hidden'}`}>|</span>
                 </p>
 
@@ -85,6 +84,7 @@ const About = () => {
                         ))}
                     </ul>
                 </div>
+
                 <div className='mt-8'>
                     <ul className='flex gap-4 '>
                         {socialIcons.map((icon, index) => (
@@ -98,16 +98,17 @@ const About = () => {
                         ))}
                     </ul>
                 </div>
+
                 <div className="mt-8">
-                        <button className="bg-gradient-to-r from-orange-400 via-orange-500 to-orange-600 text-white font-bold py-2 px-4 rounded-lg shadow-lg hover:from-orange-500 hover:via-orange-600 hover:to-orange-700 transition-all duration-300 ease-in-out">
-                            Download CV
-                        </button>
-                    </div>
+                    <button className="bg-gradient-to-r from-orange-400 via-orange-500 to-orange-600 text-white font-bold py-2 px-4 rounded-lg shadow-lg hover:from-orange-500 hover:via-orange-600 hover:to-orange-700 transition-all duration-300 ease-in-out">
+                        Download CV
+                    </button>
+                </div>
             </div>
 
             {/* Image Section */}
             <div className='flex justify-center h-32 '>
-                <div className=' flex justify-center items-center' style={{width: 400, height: 400}}>
+                <div className='flex justify-center items-center' style={{ width: 400, height: 400 }}>
                     <img
                         ref={imageRef}
                         src={profilePic.src}
