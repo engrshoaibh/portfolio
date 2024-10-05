@@ -44,7 +44,7 @@ body {
 	-webkit-text-stroke: 1px #000000;
 	filter: 
 		drop-shadow(0 0 1px rgba(255,255,255, 0.5))
-		drop-shadow(0 0 1px rgba(41, 131, 172, 0.5))
+		drop-shadow(0 0 1px rgba(172, 126, 41, 0.5))
 		drop-shadow(0 0 8px rgba(125, 204, 239, 0.5))
 		drop-shadow(0 0 8px rgba(58, 122, 155, 0.5));
 }

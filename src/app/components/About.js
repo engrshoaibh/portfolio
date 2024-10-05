@@ -107,8 +107,8 @@ const About = () => {
             </div>
 
             {/* Image Section */}
-            <div className='flex justify-center h-32 '>
-                <div className='flex justify-center items-center' style={{ width: 400, height: 400 }}>
+            <div className='relative flex justify-center h-32 '>
+                <div className='flex justify-center items-center ' style={{ width: 400, height: 400 }}>
                     <img
                         ref={imageRef}
                         src={profilePic.src}
@@ -116,8 +116,7 @@ const About = () => {
                         width={profilePic.width}
                         height={profilePic.height}
                         placeholder="blur"
-                        blurDataURL={profilePic.blurDataURL}
-                        className="mx-auto md:mx-0 rounded-full bg-orange-400 shadow-lg shadow-orange-500/100"
+                        className="mx-auto md:mx-0 rounded-full shadow-lg frozon"
                     />
                 </div>
             </div>

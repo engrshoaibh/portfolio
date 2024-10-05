@@ -1,7 +1,7 @@
 'use client'
 import {Disclosure, DisclosurePanel, DisclosureButton } from '@headlessui/react'
 import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline'
-
+import logo from '../../../assets/logo.png'
 const navigation = [
     { name: 'About Me', href: '#', current: true },
     { name: 'Projects', href: '#', current: false },
@@ -28,8 +28,8 @@ export default function Header() {
                     <div className="flex flex-shrink-0 items-center hidden sm:block">
                         <img
                             className="h-8 w-auto"
-                            src="https://tailwindui.com/plus/img/logos/mark.svg?color=indigo&shade=500"
-                            alt="Your Company"
+                            src={logo.src}
+                            alt="Shoaib Hassan"
                         />
                     </div>
 

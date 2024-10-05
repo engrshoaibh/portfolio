@@ -37,6 +37,7 @@ const CustomCursor = () => {
             ref={cursorRef}
             className="custom-cursor"
             style={{
+                zIndex: 10,
                 position: 'fixed',
                 width: '30px',
                 height: '30px',
@@ -44,6 +45,7 @@ const CustomCursor = () => {
                 borderRadius: '50%',
                 pointerEvents: 'none', 
                 transform: 'translate(-50%, -50%)',
+          
             }}
         ></div>
     );

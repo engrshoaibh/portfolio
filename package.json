@@ -12,7 +12,6 @@
     "@headlessui/react": "^2.1.9",
     "@heroicons/react": "^2.1.5",
     "@netlify/plugin-nextjs": "^5.7.3",
-    "@next/font": "^14.2.14",
     "gsap": "^3.12.5",
     "next": "14.2.14",
     "react": "^18",
