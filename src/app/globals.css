@@ -19,9 +19,64 @@ body {
   background: var(--background);
   font-family: Arial, Helvetica, sans-serif;
 }
+::selection {
+	background-color: #fb923c;
+	color: white; 
+}
 
 @layer utilities {
   .text-balance {
     text-wrap: balance;
   }
+}
+
+
+
+.frozon {
+	font-family: "frozen", serif;
+	background-image: url("https://assets.codepen.io/209981/ice.jpg");
+	-webkit-background-clip: text;
+	-webkit-text-fill-color: transparent;
+  
+	background-size: contain;
+	position: relative;
+  letter-spacing: 4px;
+	-webkit-text-stroke: 1px #000000;
+	filter: 
+		drop-shadow(0 0 1px rgba(255,255,255, 0.5))
+		drop-shadow(0 0 1px rgba(41, 131, 172, 0.5))
+		drop-shadow(0 0 8px rgba(125, 204, 239, 0.5))
+		drop-shadow(0 0 8px rgba(58, 122, 155, 0.5));
+}
+
+
+.animation {
+	background: linear-gradient(
+		45deg,
+		rgba(255, 255, 255, 0) 45%,
+		rgba(255, 255, 255, 0.8) 50%,
+		rgba(255, 255, 255, 0) 55%,
+		rgba(255, 255, 255, 0) 100%
+	);
+	-webkit-background-clip: text;
+	-webkit-text-fill-color: transparent;
+	animation: shine 7s infinite;
+	background-size: 200%;
+}
+
+@keyframes shine {
+	0% {
+		background-position: -120%;
+	}
+	10% {
+		background-position: 120%;
+	}
+	100% {
+		background-position: 120%;
+	}
+}
+
+@font-face {
+	font-family: "Frozen";
+	src: url("https://s3-us-west-2.amazonaws.com/s.cdpn.io/209981/Ice%20kingdom%20-%20Bold%20-%20Por%20Kustren.woff");
 }
