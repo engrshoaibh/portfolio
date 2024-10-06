@@ -101,9 +101,9 @@ const About = () => {
 
                 <div className="mt-8">
                     <button  className="bg-gradient-to-r from-orange-400 via-orange-500 to-orange-600 text-white font-bold py-2 px-4 rounded-lg shadow-lg hover:from-orange-500 hover:via-orange-600 hover:to-orange-700 transition-all duration-300 ease-in-out"
-                    onClick={
-                        location.href = 'https://drive.google.com/uc?export=download&id=1Y9VdGCSZeILbqWDyZfAQLfk5ndOXEmC-'
-                    }
+                    onClick={() => {
+                        window.location.href = 'https://drive.google.com/uc?export=download&id=1Y9VdGCSZeILbqWDyZfAQLfk5ndOXEmC-';
+                    }}
                     >
                         Download CV
                     </button>
