@@ -1,4 +1,4 @@
-import { FaFacebook, FaTwitter ,FaGithub ,FaInstagram} from "react-icons/fa";
+import { FaFacebook, FaTwitter ,FaGithub ,FaInstagram, FaLinkedinIn} from "react-icons/fa";
 const bulletPoints = [
     'Freshly graduated student with a BS in Software Engineering.',
     'Developed my final year project titled "Brain Tumor and Alzheimer\'s Detection," which is research-oriented.',
@@ -25,8 +25,8 @@ const socialIcons = [
     },
     {
         name: "Instagram",
-        icon: <FaInstagram/>,
-        url: 'https://instagram.com/'
+        icon: <FaLinkedinIn/>,
+        url: 'https://linkedin.com/in/engrshoaibhassan'
     },
 ]
 
