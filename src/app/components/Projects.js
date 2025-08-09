@@ -144,7 +144,7 @@ export default function Projects() {
               className="group relative rounded-2xl p-[1px] bg-gradient-to-br from-orange-500/25 via-orange-400/10 to-transparent hover:from-orange-400/50 transition card-hover"
             >
               <div className="relative rounded-2xl h-full w-full overflow-hidden bg-white/5 backdrop-blur p-5 border border-white/10">
-                <div className="relative aspect-[16/10] w-full overflow-hidden rounded-xl">
+                <div className="relative aspect-[16/10] w-full overflow-hidden rounded-xl will-change-transform">
                   <DistortedImage src={p.image?.src} className="absolute inset-0" dataThumb />
                   <div className="pointer-events-none absolute inset-0 opacity-0 group-hover:opacity-100 transition">
                     <div className="absolute inset-y-0 -left-1/2 w-1/2 bg-gradient-to-r from-white/20 to-transparent blur-2xl transform group-hover:translate-x-[200%] duration-700"></div>

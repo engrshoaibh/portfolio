@@ -19,6 +19,24 @@ export default function SmoothScrollProvider({ children }) {
     const initSmoothScroll = async () => {
       if (!scrollRef.current) return
 
+      const shouldDisable = () => {
+        const mql = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches
+        const isCoarse = window.matchMedia && window.matchMedia('(pointer: coarse)').matches
+        const conn = navigator.connection || navigator.mozConnection || navigator.webkitConnection
+        const saveData = conn && conn.saveData
+        const effType = conn && (conn.effectiveType || '')
+        const slowNet = effType && /(^|\s)(2g|slow-2g)/i.test(effType)
+        const isNarrow = window.innerWidth < 768
+        return mql || saveData || slowNet || (isCoarse && isNarrow)
+      }
+
+      if (shouldDisable()) {
+        // Mark as not using smooth scroller
+        scrollRef.current.dataset.smooth = '0'
+        ScrollTrigger.refresh()
+        return
+      }
+
       // Dynamic import to avoid SSR issues
       const LocomotiveScroll = (await import('locomotive-scroll')).default
 
@@ -34,6 +52,7 @@ export default function SmoothScrollProvider({ children }) {
       })
 
       locoRef.current = loco
+      scrollRef.current.dataset.smooth = '1'
 
       // Set up ScrollTrigger proxy
       ScrollTrigger.scrollerProxy(scrollRef.current, {
@@ -85,7 +104,12 @@ export default function SmoothScrollProvider({ children }) {
       ScrollTrigger.refresh()
     }
 
-    initSmoothScroll()
+    if ('requestIdleCallback' in window) {
+      // @ts-ignore
+      requestIdleCallback(initSmoothScroll, { timeout: 2000 })
+    } else {
+      setTimeout(initSmoothScroll, 0)
+    }
 
     return () => {
       if (onRefresh) ScrollTrigger.removeEventListener('refresh', onRefresh)

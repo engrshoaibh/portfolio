@@ -77,7 +77,7 @@ export default function DistortedImage({ src, className = '', dataThumb = false 
     const canvas = canvasRef.current
     if (!container || !canvas) return
 
-    const gl = canvas.getContext('webgl')
+    const gl = canvas.getContext('webgl', { powerPreference: 'low-power', antialias: false, preserveDrawingBuffer: false })
     if (!gl) return
 
     const vs = createShader(gl, gl.VERTEX_SHADER, vertexSrc)
@@ -135,8 +135,13 @@ export default function DistortedImage({ src, className = '', dataThumb = false 
       gl.uniform2f(uRes, canvas.width, canvas.height)
     }
     resize()
-    const ro = new ResizeObserver(resize)
-    ro.observe(container)
+    let ro
+    if ('ResizeObserver' in window) {
+      ro = new ResizeObserver(resize)
+      ro.observe(container)
+    } else {
+      window.addEventListener('resize', resize)
+    }
 
     function render(t) {
       const s = stateRef.current
@@ -168,7 +173,7 @@ export default function DistortedImage({ src, className = '', dataThumb = false 
       container.removeEventListener('mouseenter', onEnter)
       container.removeEventListener('mouseleave', onLeave)
       container.removeEventListener('mousemove', onMove)
-      ro.disconnect()
+      if (ro) ro.disconnect(); else window.removeEventListener('resize', resize)
     }
   }, [src])
 

@@ -16,7 +16,7 @@ export default function Home() {
       <Header />
       <ScrollProgress />
       <SmoothScrollProvider>
-        <main>
+        <main className="cv-auto">
           <section data-scroll-section id="about" className="scroll-mt-24 md:scroll-mt-28"><About /></section>
           <section data-scroll-section id="projects" className="scroll-mt-24 md:scroll-mt-28"><Projects /></section>
           <section data-scroll-section id="tech" className="scroll-mt-24 md:scroll-mt-28"><TechStack /></section>
