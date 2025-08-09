@@ -28,7 +28,9 @@ const socialIcons = [
         icon: <FaLinkedinIn/>,
         url: 'https://linkedin.com/in/engrshoaibhassan'
     },
+
 ]
 
-export default {bulletPoints, socialIcons};
+const exported = { bulletPoints, socialIcons }
+export default exported;
 

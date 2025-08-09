@@ -1,12 +1,13 @@
 'use client'
 import WavyWrapper from './WavyWrapper';
 
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState, useRef, useMemo } from 'react';
 import profilePic from '../../../assets/image.png';
 import data from './data';
 // Removed BlobMorph background per request
 import ParticleImage from './ParticleImage';
 import gsap from 'gsap';
+import Image from 'next/image';
 
 const { bulletPoints, socialIcons } = data;
 
@@ -18,8 +19,8 @@ const About = () => {
     const [typingSpeed, setTypingSpeed] = useState(150);
     const [showCursor, setShowCursor] = useState(true);
 
-    // Move words outside of the component to avoid re-creation on each render
-    const words = ["Software Engineer", "ReactJS Developer", "Research Enthusiast"];
+    // Stable words list
+    const words = useMemo(() => ["Software Engineer", "ReactJS Developer", "Research Enthusiast"], []);
 
     useEffect(() => {
         const handleTyping = () => {
@@ -121,14 +122,16 @@ const About = () => {
             <div className='relative group flex justify-center md:justify-end items-center flex-1 w-full'>
                 <div className='flex justify-center items-center w-[300px] h-[300px] md:w-[420px] md:h-[420px] rounded-full overflow-hidden border border-white/10 bg-white/5 backdrop-blur card-hover grayscale group-hover:grayscale-0 transition-[filter] duration-500 ease-out'>
                     <ParticleImage src={profilePic.src} width={420} height={420} className='hidden md:block w-full h-full' />
-                    <img
+                    <Image
                         ref={imageRef}
-                        src={profilePic.src}
+                        src={profilePic}
                         alt="Profile"
                         width={profilePic.width}
                         height={profilePic.height}
                         placeholder="blur"
                         className="md:hidden w-full h-full object-cover rounded-full shadow-lg"
+                        sizes="(max-width: 768px) 300px, 420px"
+                        priority
                     />
                 </div>
             </div>

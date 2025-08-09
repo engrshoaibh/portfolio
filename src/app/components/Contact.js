@@ -47,7 +47,7 @@ export default function Contact() {
       <h2 className="text-3xl md:text-4xl font-bold relative z-10">
         <TextSplit text="Let’s build your product" />
       </h2>
-      <p className="mt-3 text-gray-300">Tell me about your startup or project—I'll get back within 24 hours.</p>
+      <p className="mt-3 text-gray-300">Tell me about your startup or project—I&apos;ll get back within 24 hours.</p>
 
       <div className="mt-10 grid grid-cols-1 md:grid-cols-2 gap-8">
         <form onSubmit={onSubmit} className="rounded-2xl border border-white/10 bg-white/5 backdrop-blur p-6 md:p-8">

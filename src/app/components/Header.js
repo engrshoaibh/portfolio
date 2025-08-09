@@ -1,6 +1,7 @@
 'use client'
 import {Disclosure, DisclosurePanel, DisclosureButton } from '@headlessui/react'
 import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline'
+import Image from 'next/image'
 import logo from '../../../assets/logo.png'
 const navigation = [
     { name: 'About Me', href: '#about', current: true },
@@ -26,10 +27,12 @@ export default function Header() {
                     
                     {/* Logo */}
                     <div className="flex flex-shrink-0 items-center hidden sm:block">
-                        <img
+                        <Image
                             className="h-8 w-auto"
-                            src={logo.src}
+                            src={logo}
                             alt="Shoaib Hassan"
+                            height={32}
+                            priority
                         />
                     </div>
 
