@@ -16,9 +16,9 @@ const CustomCursor = () => {
                 ease: "power2.out", 
             });
         };
-        const handleMouseLeave = (event) => {
+        const handleMouseLeave = () => {
             gsap.to(cursor, {
-               backgroundColor: transparent, 
+               backgroundColor: 'transparent',
             });
         };
 
@@ -27,7 +27,7 @@ const CustomCursor = () => {
 
         return () => {
             window.removeEventListener('mousemove', handleMouseMove);
-            window.addEventListener('mouseleave', handleMouseLeave)
+            window.removeEventListener('mouseleave', handleMouseLeave);
         };
     }, []);
     

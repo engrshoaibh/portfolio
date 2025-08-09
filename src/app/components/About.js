@@ -1,8 +1,11 @@
 'use client'
+import WavyWrapper from './WavyWrapper';
 
 import { useEffect, useState, useRef } from 'react';
 import profilePic from '../../../assets/image.png';
 import data from './data';
+// Removed BlobMorph background per request
+import ParticleImage from './ParticleImage';
 import gsap from 'gsap';
 
 const { bulletPoints, socialIcons } = data;
@@ -64,16 +67,20 @@ const About = () => {
     }, []);
 
     return (
-        <div className='flex flex-col md:flex-row bg-white-500 justify-center items-center gap-4 mt-20 mx-20'>
+        <div className='mx-auto max-w-7xl px-6 md:px-8 py-16 flex flex-col md:flex-row justify-between items-center gap-10'>
             {/* Text Section */}
-            <div className='h-32 flex flex-col flex-1'>
-                <p className='text-white mt-4'>
-                    <span className='font-bold text-[40px]'>Shoaib Hassan</span>
-                </p>
-                <p className='text-white text-[35px]'>
-                    I&apos;m a <span className='text-orange-400 font-bold'>{text}</span>
-                    <span className={`text-orange-400 font-bold ${showCursor ? 'inline' : 'hidden'}`}>|</span>
-                </p>
+            <div className='flex flex-col flex-1 w-full max-w-2xl'>
+                <WavyWrapper intensity={6} speed={12}>
+                    <p className='text-white mt-4'>
+                        <span className='font-bold text-[40px]'>Shoaib Hassan</span>
+                    </p>
+                </WavyWrapper>
+                <WavyWrapper intensity={5} speed={14}>
+                    <p className='text-white text-[35px]'>
+                        I&apos;m a <span className='text-orange-400 font-bold'>{text}</span>
+                        <span className={`text-orange-400 font-bold ${showCursor ? 'inline' : 'hidden'}`}>|</span>
+                    </p>
+                </WavyWrapper>
 
                 <div className='mt-10'>
                     <ul className='list-disc list-inside text-white'>
@@ -111,8 +118,9 @@ const About = () => {
             </div>
 
             {/* Image Section */}
-            <div className='relative flex justify-center h-32 '>
-                <div className='flex justify-center items-center ' style={{ width: 400, height: 400 }}>
+            <div className='relative group flex justify-center md:justify-end items-center flex-1 w-full'>
+                <div className='flex justify-center items-center w-[300px] h-[300px] md:w-[420px] md:h-[420px] rounded-full overflow-hidden border border-white/10 bg-white/5 backdrop-blur card-hover grayscale group-hover:grayscale-0 transition-[filter] duration-500 ease-out'>
+                    <ParticleImage src={profilePic.src} width={420} height={420} className='hidden md:block w-full h-full' />
                     <img
                         ref={imageRef}
                         src={profilePic.src}
@@ -120,7 +128,7 @@ const About = () => {
                         width={profilePic.width}
                         height={profilePic.height}
                         placeholder="blur"
-                        className="mx-auto md:mx-0 rounded-full shadow-lg frozon"
+                        className="md:hidden w-full h-full object-cover rounded-full shadow-lg"
                     />
                 </div>
             </div>

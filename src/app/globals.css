@@ -2,6 +2,8 @@
 @tailwind components;
 @tailwind utilities;
 
+@import 'locomotive-scroll/dist/locomotive-scroll.css';
+
 :root {
   --background: #ffffff;
   --foreground: #171717;
@@ -19,6 +21,41 @@ body {
   background: var(--background);
   font-family: Arial, Helvetica, sans-serif;
 }
+
+/* Locomotive Scroll required base fixes */
+html.has-scroll-smooth {
+  overflow: hidden;
+}
+.has-scroll-smooth body {
+  overflow: hidden;
+}
+.has-scroll-smooth [data-scroll-container] {
+  min-height: 100vh;
+}
+.c-scrollbar {
+  position: absolute;
+  right: 0;
+  top: 0;
+  width: 11px;
+  height: 100%;
+  transform-origin: center right;
+  transition: transform 0.3s, opacity 0.3s;
+  opacity: 0;
+}
+.c-scrollbar:hover,
+.has-scroll-scrolling .c-scrollbar,
+.has-scroll-dragging .c-scrollbar {
+  opacity: 1;
+}
+.c-scrollbar_thumb {
+  position: absolute;
+  top: 0;
+  right: 0;
+  background-color: rgba(255,255,255,0.5);
+  width: 7px;
+  border-radius: 10px;
+  margin: 2px;
+}
 ::selection {
 	background-color: #fb923c;
 	color: white; 
@@ -28,6 +65,33 @@ body {
   .text-balance {
     text-wrap: balance;
   }
+}
+
+/* Modern nav underline */
+.nav-link {
+  position: relative;
+}
+.nav-link::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -4px;
+  width: 0;
+  height: 2px;
+  background: linear-gradient(90deg, #fb923c, #f97316);
+  transition: width 260ms ease;
+}
+.nav-link:hover::after {
+  width: 100%;
+}
+
+/* Subtle lift on hover for cards */
+.card-hover {
+  transition: transform 260ms ease, box-shadow 260ms ease, background-color 260ms ease;
+}
+.card-hover:hover {
+  transform: translateY(-4px) scale(1.01);
+  box-shadow: 0 8px 40px rgba(249, 115, 22, 0.12);
 }
 
 

@@ -3,16 +3,16 @@ import {Disclosure, DisclosurePanel, DisclosureButton } from '@headlessui/react'
 import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline'
 import logo from '../../../assets/logo.png'
 const navigation = [
-    { name: 'About Me', href: '#', current: true },
-    { name: 'Projects', href: '#', current: false },
-    { name: 'Services', href: '#', current: false },
-    { name: 'Contact Me', href: '#', current: false },
+    { name: 'About Me', href: '#about', current: true },
+    { name: 'Projects', href: '#projects', current: false },
+    { name: 'Services', href: '#services', current: false },
+    { name: 'Contact Me', href: '#contact', current: false },
 ]
 
 
 export default function Header() {
     return (
-        <Disclosure as="nav" >
+        <Disclosure as="nav" className="sticky top-0 z-40 backdrop-blur supports-[backdrop-filter]:bg-black/30 bg-black/20"> 
             <div className="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
                 <div className="relative flex h-16 items-center justify-between">
                     <div className="absolute inset-y-0 left-0 flex items-center sm:hidden">
@@ -40,7 +40,7 @@ export default function Header() {
                                 <a
                                     key={item.name}
                                     href={item.href}
-                                    className={`text-white hover:text-orange-400 rounded-md px-3 py-2 text-sm font-medium`}
+                                    className={`nav-link text-white/90 hover:text-orange-300 rounded-md px-3 py-2 text-sm font-medium`}
                                     aria-current={item.current ? 'page' : undefined}
                                 >
                                     {item.name}
