@@ -1,10 +1,7 @@
 import { FaFacebook, FaTwitter ,FaGithub ,FaInstagram, FaLinkedinIn} from "react-icons/fa";
 const bulletPoints = [
-    'Freshly graduated student with a BS in Software Engineering.',
-    'Developed my final year project titled "Brain Tumor and Alzheimer\'s Detection," which is research-oriented.',
-    'Enthusiastic learner and researcher in the field of machine learning.',
-    'I achieved a CGPA of 3.69/4.00.',
-    'I want to continue my research in the field of computer science.'
+    '1.5+ Years of Experience in mobile development (Flutter and FlutterFlow).',
+    'Experience in Next.js web development.'
 ];
 
 const socialIcons = [
