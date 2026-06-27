@@ -71,7 +71,7 @@ export default function Projects() {
       {/* Title & Description */}
       <div className="mx-auto max-w-7xl px-6 md:px-8 mb-12 flex flex-col md:flex-row md:justify-between md:items-end gap-6">
         <div className="w-full">
-          <h2 className="text-3xl md:text-5xl lg:text-6xl font-bold font-playfair tracking-tight text-white">
+          <h2 className="text-3xl md:text-5xl lg:text-6xl font-bold font-poppins tracking-tight text-white">
             <TextSplit text="Selected Projects" />
           </h2>
           <p className="mt-4 text-gray-400 max-w-2xl text-base md:text-lg">
@@ -90,8 +90,8 @@ export default function Projects() {
             textColor="#ffffff"
             borderRadius={0.06}
             scrollEase={0.03}
-            fontUrl="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&display=swap"
-            font="bold 20px Playfair Display"
+            fontUrl="https://fonts.googleapis.com/css2?family=Poppins:wght@700&display=swap"
+            font="bold 20px Poppins"
             scrollSpeed={2.5}
           />
         </div>
