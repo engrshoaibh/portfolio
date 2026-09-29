@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useId } from 'react'
 import gsap from 'gsap'
 
 export default function WavyWrapper({
@@ -11,7 +11,8 @@ export default function WavyWrapper({
   frequency = 0.006,
   speed = 10, // seconds for a full cycle
 }) {
-  const idRef = useRef(`wavy_${Math.random().toString(36).slice(2)}`)
+  const generatedId = useId()
+  const filterId = `wavy_${generatedId.replace(/:/g, '')}`
   const turbRef = useRef(null)
   const dispRef = useRef(null)
   const tlRef = useRef(null)
@@ -31,7 +32,7 @@ export default function WavyWrapper({
     return () => tl.kill()
   }, [frequency, intensity, speed])
 
-  const filterId = idRef.current
+  // filterId is defined above
 
   return (
     <Tag className={`${className} will-change-transform`} style={{ filter: `url(#${filterId})` }}>

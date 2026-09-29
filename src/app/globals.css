@@ -157,3 +157,20 @@ html.has-scroll-smooth {
   -ms-overflow-style: none;
   scrollbar-width: none;
 }
+
+@keyframes slideUpFade {
+  0% { opacity: 0; transform: translateY(1rem); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+@keyframes slideUpHero {
+  0% { transform: translateY(105%); }
+  100% { transform: translateY(0); }
+}
+
+.animate-hero-name {
+  animation: slideUpHero 1.2s cubic-bezier(0.16, 1, 0.3, 1) 0.1s forwards;
+}
+.animate-hero-fade {
+  opacity: 0;
+  animation: slideUpFade 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}

@@ -1,7 +1,10 @@
 'use client'
 
 import { useMemo, useState, useEffect } from 'react'
-import CircularGallery from './CircularGallery'
+import Image from 'next/image'
+import dynamic from 'next/dynamic'
+
+const CircularGallery = dynamic(() => import('./CircularGallery'), { ssr: false })
 import TextSplit from './TextSplit'
 import imgA from '../../../assets/325363351-baaf3e60-1b46-44da-9b34-6b5787100655.jpg'
 import imgB from '../../../assets/325364184-bd85ef15-b275-43f8-81ba-6cfeb7b47d6a.jpg'
@@ -106,10 +109,12 @@ export default function Projects() {
               <div>
                 {/* Thumbnail Image */}
                 <div className="relative aspect-[16/10] w-full overflow-hidden rounded-xl bg-black/10">
-                  <img
+                  <Image
                     src={p.image?.src || p.image}
                     alt={p.title}
-                    className="w-full h-full object-cover select-none"
+                    fill
+                    sizes="(max-width: 640px) 280px, 320px"
+                    className="object-cover select-none"
                     draggable="false"
                   />
                 </div>
