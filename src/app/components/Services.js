@@ -3,7 +3,7 @@
 import { useEffect, useRef } from 'react'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
-import TextSplit from './TextSplit'
+import SectionHeading from './SectionHeading'
 
 gsap.registerPlugin(ScrollTrigger)
 
@@ -40,9 +40,7 @@ export default function Services() {
 
   return (
     <section id="services" ref={ref} className="mx-auto max-w-7xl px-6 md:px-8 py-24">
-      <h2 className="text-3xl md:text-4xl font-bold relative z-10">
-        <TextSplit text="Services" />
-      </h2>
+      <SectionHeading textClassName="!text-3xl md:!text-4xl">Services</SectionHeading>
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-10">
         {SERVICES.map(s => (
           <div

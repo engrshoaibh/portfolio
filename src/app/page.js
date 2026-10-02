@@ -3,6 +3,7 @@ import dynamic from 'next/dynamic'
 
 import Header from './components/Header'
 import About from './components/About'
+import FadeContent from '@/components/FadeContent'
 
 const CustomCursor = dynamic(() => import('./components/CustomCursor'), { ssr: false })
 const SmoothScrollProvider = dynamic(() => import('./components/SmoothScrollProvider'), { ssr: false })
@@ -24,12 +25,32 @@ export default function Home() {
       <SidebarNavigation />
 
       <SmoothScrollProvider>
-        <main className="cv-auto lg:pl-64">
-          <section data-scroll-section id="about" className="scroll-mt-24 md:scroll-mt-28"><About /></section>
-          <section data-scroll-section id="projects" className="scroll-mt-24 md:scroll-mt-28"><Projects /></section>
-          <section data-scroll-section id="tech" className="scroll-mt-24 md:scroll-mt-28"><TechStack /></section>
-          <section data-scroll-section id="services" className="scroll-mt-24 md:scroll-mt-28"><Services /></section>
-          <section data-scroll-section id="contact" className="scroll-mt-24 md:scroll-mt-28"><Contact /></section>
+        <main className="lg:pl-64">
+          <section data-scroll-section id="about" className="scroll-mt-24 md:scroll-mt-28">
+            <FadeContent container="[data-scroll-container]" blur duration={900} threshold={0.15}>
+              <About />
+            </FadeContent>
+          </section>
+          <section data-scroll-section id="projects" className="scroll-mt-24 md:scroll-mt-28">
+            <FadeContent container="[data-scroll-container]" blur duration={900} threshold={0.12}>
+              <Projects />
+            </FadeContent>
+          </section>
+          <section data-scroll-section id="tech" className="scroll-mt-24 md:scroll-mt-28">
+            <FadeContent container="[data-scroll-container]" blur duration={900} threshold={0.12}>
+              <TechStack />
+            </FadeContent>
+          </section>
+          <section data-scroll-section id="services" className="scroll-mt-24 md:scroll-mt-28">
+            <FadeContent container="[data-scroll-container]" blur duration={900} threshold={0.12}>
+              <Services />
+            </FadeContent>
+          </section>
+          <section data-scroll-section id="contact" className="scroll-mt-24 md:scroll-mt-28">
+            <FadeContent container="[data-scroll-container]" blur duration={900} threshold={0.12}>
+              <Contact />
+            </FadeContent>
+          </section>
         </main>
       </SmoothScrollProvider>
     </div>

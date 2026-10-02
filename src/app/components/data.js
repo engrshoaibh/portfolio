@@ -4,6 +4,9 @@ const bulletPoints = [
     'Experience in Next.js web development.'
 ];
 
+const yearsExperience = 1.5
+const featuredProjectCount = 6
+
 const socialIcons = [
     {
         name: "Facebook",
@@ -28,6 +31,6 @@ const socialIcons = [
 
 ]
 
-const exported = { bulletPoints, socialIcons }
+const exported = { bulletPoints, socialIcons, yearsExperience, featuredProjectCount }
 export default exported;
 

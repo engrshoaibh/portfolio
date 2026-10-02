@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import TextSplit from './TextSplit'
+import SectionHeading from './SectionHeading'
 
 export default function Contact() {
   const [form, setForm] = useState({
@@ -44,9 +44,7 @@ export default function Contact() {
 
   return (
     <section id="contact" className="mx-auto max-w-7xl px-6 md:px-8 py-24">
-      <h2 className="text-3xl md:text-4xl font-bold relative z-10">
-        <TextSplit text="Let’s build your product" />
-      </h2>
+      <SectionHeading textClassName="!text-3xl md:!text-4xl">Let&apos;s build your product</SectionHeading>
       <p className="mt-3 text-gray-300">Tell me about your startup or project—I&apos;ll get back within 24 hours.</p>
 
       <div className="mt-10 grid grid-cols-1 md:grid-cols-2 gap-8">
