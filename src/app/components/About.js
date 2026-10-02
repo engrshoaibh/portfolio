@@ -4,11 +4,13 @@ import WavyWrapper from './WavyWrapper';
 import { useEffect, useState, useRef, useMemo } from 'react';
 import profilePic from '../../../assets/image-nobg.png';
 import data from './data';
+import GradientText from '@/components/GradientText';
+import CountUp from '@/components/CountUp';
 // Removed BlobMorph background per request
 import gsap from 'gsap';
 import Image from 'next/image';
 
-const { bulletPoints, socialIcons } = data;
+const { bulletPoints, socialIcons, yearsExperience, featuredProjectCount } = data;
 
 const About = () => {
     const imageRef = useRef(null);
@@ -64,7 +66,7 @@ const About = () => {
 
         // Use CSS animations for entrance to prevent Speed Index delay.
         // 4. Start floating animation for the picture
-        gsap.to(imageRef.current, {
+        const floatTween = gsap.to(imageRef.current, {
             y: 10,
             duration: 1.5,
             repeat: -1,
@@ -74,7 +76,7 @@ const About = () => {
         });
 
         return () => {
-            tl.kill();
+            floatTween.kill();
         };
     }, []);
 
@@ -84,10 +86,17 @@ const About = () => {
             <div className='relative w-full flex items-center justify-center min-h-[240px] md:min-h-[340px] mb-8 select-none'>
                 {/* Name Section (Largest Font using Playfair Display, Background Layer) */}
                 <div className='overflow-hidden w-full py-4 z-0'>
-                    <div ref={nameRef} className='animate-hero-name will-change-transform'>
-                        <h1 className='text-white text-[8.5vw] lg:text-[7.5rem] font-black font-poppins tracking-tight leading-none text-center whitespace-nowrap'>
-                            SHOAIB HASSAN
-                        </h1>
+                    <div ref={nameRef} className='animate-hero-name will-change-transform flex justify-center'>
+                        <GradientText
+                            colors={['#ffffff', '#fb923c', '#ea580c', '#fdba74']}
+                            animationSpeed={6}
+                            direction="horizontal"
+                            yoyo
+                        >
+                            <h1 className='text-[8.5vw] lg:text-[7.5rem] font-black font-poppins tracking-tight leading-none text-center whitespace-nowrap'>
+                                SHOAIB HASSAN
+                            </h1>
+                        </GradientText>
                     </div>
                 </div>
 
@@ -120,6 +129,22 @@ const About = () => {
                         <span className={`text-orange-400 font-bold ${showCursor ? 'inline' : 'hidden'}`}>|</span>
                     </p>
                 </WavyWrapper>
+            </div>
+
+            <div className='animate-hero-fade mt-10 flex flex-wrap items-start justify-center gap-10 sm:gap-16' style={{ animationDelay: '0.55s' }}>
+                <div className='text-center min-w-[8rem]'>
+                    <p className='text-4xl md:text-5xl font-black text-white tabular-nums'>
+                        <CountUp to={yearsExperience} duration={1.6} delay={0.35} />
+                        <span className='text-orange-400'>+</span>
+                    </p>
+                    <p className='mt-1 text-sm text-white/70'>Years experience</p>
+                </div>
+                <div className='text-center min-w-[8rem]'>
+                    <p className='text-4xl md:text-5xl font-black text-white tabular-nums'>
+                        <CountUp to={featuredProjectCount} duration={1.6} delay={0.5} />
+                    </p>
+                    <p className='mt-1 text-sm text-white/70'>Selected projects</p>
+                </div>
             </div>
 
             {/* Bullet Points */}

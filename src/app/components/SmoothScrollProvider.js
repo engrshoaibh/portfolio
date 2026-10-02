@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useLayoutEffect, useRef } from 'react'
+import { useLayoutEffect, useRef } from 'react'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 
@@ -15,9 +15,44 @@ export default function SmoothScrollProvider({ children }) {
     let loco
     let onRefresh
     let readScrollFn
+    let onWindowScroll
+    let idleId
+    let timeoutId
+    let cancelled = false
+
+    const scrollerEl = scrollRef.current
+    if (!scrollerEl) return undefined
+
+    const windowProxy = {
+      scrollTop(value) {
+        if (arguments.length) {
+          window.scrollTo(0, value)
+        }
+        return window.pageYOffset || document.documentElement.scrollTop || 0
+      },
+      getBoundingClientRect() {
+        return {
+          top: 0,
+          left: 0,
+          width: window.innerWidth,
+          height: window.innerHeight,
+        }
+      },
+    }
+
+    const bindWindowProxy = () => {
+      ScrollTrigger.scrollerProxy(scrollerEl, windowProxy)
+      if (!onWindowScroll) {
+        onWindowScroll = () => ScrollTrigger.update()
+        window.addEventListener('scroll', onWindowScroll, { passive: true })
+      }
+      ScrollTrigger.refresh()
+    }
+
+    bindWindowProxy()
 
     const initSmoothScroll = async () => {
-      if (!scrollRef.current) return
+      if (cancelled || !scrollRef.current) return
 
       const shouldDisable = () => {
         const mql = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches
@@ -31,14 +66,13 @@ export default function SmoothScrollProvider({ children }) {
       }
 
       if (shouldDisable()) {
-        // Mark as not using smooth scroller
         scrollRef.current.dataset.smooth = '0'
         ScrollTrigger.refresh()
         return
       }
 
-      // Dynamic import to avoid SSR issues
       const LocomotiveScroll = (await import('locomotive-scroll')).default
+      if (cancelled || !scrollRef.current) return
 
       loco = new LocomotiveScroll({
         el: scrollRef.current,
@@ -54,64 +88,36 @@ export default function SmoothScrollProvider({ children }) {
       locoRef.current = loco
       scrollRef.current.dataset.smooth = '1'
 
-      // Set up ScrollTrigger proxy
-      ScrollTrigger.scrollerProxy(scrollRef.current, {
-        scrollTop(value) {
-          if (arguments.length) {
-            loco.scrollTo(value, { duration: 0, disableLerp: true })
-          } else {
-            return currentYRef.current || 0
-          }
-        },
-        getBoundingClientRect() {
-          return {
-            top: 0,
-            left: 0,
-            width: window.innerWidth,
-            height: window.innerHeight
-          }
-        },
-        pinType: scrollRef.current.style.transform ? 'transform' : 'fixed',
-      })
-
-      // Sync ScrollTrigger by sampling transform each frame (v5 safe)
+      // locomotive-scroll v5 (Lenis) scrolls the window. Keep the window proxy
+      // installed above so ScrollTrigger matches the real scroll position.
       readScrollFn = () => {
-        const style = window.getComputedStyle(scrollRef.current)
-        const transform = style.transform || style.webkitTransform
-        let ty = 0
-        if (transform && transform !== 'none') {
-          const m = transform.match(/matrix\(([^)]+)\)/)
-          if (m && m[1]) {
-            const parts = m[1].split(',').map(parseFloat)
-            // 2D matrix(a, b, c, d, tx, ty)
-            if (parts.length === 6) ty = parts[5]
-          }
-        }
-        currentYRef.current = -ty
+        currentYRef.current = window.pageYOffset || document.documentElement.scrollTop || 0
         ScrollTrigger.update()
       }
       gsap.ticker.add(readScrollFn)
 
-      // Update Locomotive on ScrollTrigger refresh (guard for API differences)
-       onRefresh = () => {
-         if (loco && typeof loco.update === 'function') {
-           loco.update()
-         } else if (loco && loco.scroll && typeof loco.scroll.update === 'function') {
-           loco.scroll.update()
-         }
-       }
-       ScrollTrigger.addEventListener('refresh', onRefresh)
+      onRefresh = () => {
+        if (loco && typeof loco.update === 'function') {
+          loco.update()
+        } else if (loco && loco.scroll && typeof loco.scroll.update === 'function') {
+          loco.scroll.update()
+        }
+      }
+      ScrollTrigger.addEventListener('refresh', onRefresh)
       ScrollTrigger.refresh()
     }
 
     if ('requestIdleCallback' in window) {
-      // @ts-ignore
-      requestIdleCallback(initSmoothScroll, { timeout: 2000 })
+      idleId = requestIdleCallback(initSmoothScroll, { timeout: 2000 })
     } else {
-      setTimeout(initSmoothScroll, 0)
+      timeoutId = setTimeout(initSmoothScroll, 0)
     }
 
     return () => {
+      cancelled = true
+      if (idleId && typeof cancelIdleCallback === 'function') cancelIdleCallback(idleId)
+      if (timeoutId) clearTimeout(timeoutId)
+      if (onWindowScroll) window.removeEventListener('scroll', onWindowScroll)
       if (onRefresh) ScrollTrigger.removeEventListener('refresh', onRefresh)
       if (readScrollFn) gsap.ticker.remove(readScrollFn)
       loco?.destroy()

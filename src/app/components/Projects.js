@@ -5,7 +5,8 @@ import Image from 'next/image'
 import dynamic from 'next/dynamic'
 
 const CircularGallery = dynamic(() => import('./CircularGallery'), { ssr: false })
-import TextSplit from './TextSplit'
+import SectionHeading from './SectionHeading'
+import GlareHover from '@/components/GlareHover'
 import imgA from '../../../assets/325363351-baaf3e60-1b46-44da-9b34-6b5787100655.jpg'
 import imgB from '../../../assets/325364184-bd85ef15-b275-43f8-81ba-6cfeb7b47d6a.jpg'
 import imgC from '../../../assets/profileImage.jpg'
@@ -49,6 +50,51 @@ const PROJECTS = [
   },
 ]
 
+function ProjectCard({ project }) {
+  return (
+    <GlareHover
+      width="100%"
+      height="100%"
+      background="rgba(255,255,255,0.04)"
+      borderRadius="16px"
+      borderColor="rgba(255,255,255,0.12)"
+      glareColor="#fb923c"
+      glareOpacity={0.45}
+      glareAngle={-32}
+      glareSize={220}
+      transitionDuration={700}
+      className="h-full"
+    >
+      <article className="flex h-full w-full flex-col justify-between p-5 text-left">
+        <div className="w-full">
+          <div className="relative aspect-[16/10] w-full overflow-hidden rounded-xl bg-black/20">
+            <Image
+              src={project.image?.src || project.image}
+              alt={project.title}
+              fill
+              sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+              className="object-cover select-none"
+              draggable="false"
+            />
+          </div>
+          <h3 className="mt-4 text-lg font-semibold text-white leading-tight">{project.title}</h3>
+          <p className="mt-2 text-gray-300 text-sm leading-relaxed">{project.description}</p>
+        </div>
+        <div className="mt-4 flex flex-wrap gap-2">
+          {project.tags.map((tag) => (
+            <span
+              key={tag}
+              className="text-[11px] px-2 py-1 rounded-full bg-orange-500/15 text-orange-300 border border-orange-400/20"
+            >
+              {tag}
+            </span>
+          ))}
+        </div>
+      </article>
+    </GlareHover>
+  )
+}
+
 export default function Projects() {
   const [isDesktop, setIsDesktop] = useState(false)
 
@@ -70,13 +116,13 @@ export default function Projects() {
   }, [])
 
   return (
-    <section id="projects" className="py-24 scroll-mt-24 md:scroll-mt-28 w-full overflow-hidden">
+    <section id="projects" className="py-24 scroll-mt-24 md:scroll-mt-28 w-full">
       {/* Title & Description */}
       <div className="mx-auto max-w-7xl px-6 md:px-8 mb-12 flex flex-col md:flex-row md:justify-between md:items-end gap-6">
         <div className="w-full">
-          <h2 className="text-3xl md:text-5xl lg:text-6xl font-bold font-poppins tracking-tight text-white">
-            <TextSplit text="Selected Projects" />
-          </h2>
+          <SectionHeading textClassName="!text-3xl md:!text-5xl lg:!text-6xl">
+            Selected Projects
+          </SectionHeading>
           <p className="mt-4 text-gray-400 max-w-2xl text-base md:text-lg">
             A mix of mobile (Flutter/FlutterFlow) and web (Next.js/React) development with an emphasis on performance, animations, and clean UX.
           </p>
@@ -86,7 +132,7 @@ export default function Projects() {
       {/* Conditionally Render WebGL Circular Gallery vs Simple Mobile Carousel */}
       {isDesktop ? (
         /* WebGL Circular Gallery (Full Viewport Width for Desktop) */
-        <div className="w-full h-[600px] relative">
+        <div className="w-full h-[600px] relative overflow-hidden">
           <CircularGallery
             items={galleryItems}
             bend={3}
@@ -98,46 +144,13 @@ export default function Projects() {
             scrollSpeed={2.5}
           />
         </div>
-      ) : (
-        /* Simple Swipeable Carousel (For Mobile & Tablet) */
-        <div className="w-full overflow-x-auto snap-x snap-mandatory flex gap-6 px-6 py-6 no-scrollbar scroll-smooth">
-          {PROJECTS.map((p) => (
-            <article
-              key={p.title}
-              className="snap-center shrink-0 w-[280px] sm:w-[320px] rounded-2xl overflow-hidden bg-white/5 border border-white/10 backdrop-blur p-5 flex flex-col justify-between"
-            >
-              <div>
-                {/* Thumbnail Image */}
-                <div className="relative aspect-[16/10] w-full overflow-hidden rounded-xl bg-black/10">
-                  <Image
-                    src={p.image?.src || p.image}
-                    alt={p.title}
-                    fill
-                    sizes="(max-width: 640px) 280px, 320px"
-                    className="object-cover select-none"
-                    draggable="false"
-                  />
-                </div>
-                {/* Info */}
-                <h3 className="mt-4 text-lg font-semibold text-white leading-tight">{p.title}</h3>
-                <p className="mt-2 text-gray-300 text-sm line-clamp-3 leading-relaxed">{p.description}</p>
-              </div>
-              
-              {/* Tags */}
-              <div className="mt-4 flex flex-wrap gap-2">
-                {p.tags.map((t) => (
-                  <span
-                    key={t}
-                    className="text-[11px] px-2 py-1 rounded-full bg-orange-500/15 text-orange-300 border border-orange-400/20"
-                  >
-                    {t}
-                  </span>
-                ))}
-              </div>
-            </article>
-          ))}
-        </div>
-      )}
+      ) : null}
+
+      <div className="mx-auto mt-8 grid max-w-7xl grid-cols-1 gap-6 px-6 sm:grid-cols-2 lg:grid-cols-3 md:px-8">
+        {PROJECTS.map((project) => (
+          <ProjectCard key={project.title} project={project} />
+        ))}
+      </div>
     </section>
   )
 }
