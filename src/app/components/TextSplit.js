@@ -23,14 +23,12 @@ export default function TextSplit({
     if (!el) return
 
     const targets = el.querySelectorAll('[data-char]')
-    const scroller = document.querySelector('[data-scroll-container]') || window
-
+    
     gsap.set(targets, { opacity: 0, ...from })
     const tl = gsap.timeline({
       scrollTrigger: {
         trigger: el,
         start: triggerOffset,
-        scroller,
         once: true,
       },
       defaults: { ease: 'power3.out' },

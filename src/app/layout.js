@@ -8,6 +8,8 @@ const poppins = Poppins({
   variable: '--font-poppins',
 });
 
+import { ThemeProvider } from "./components/ThemeProvider";
+
 export const metadata = {
   title: "Shoaib Hassan",
   description: "I'm a Software Engineer",
@@ -15,11 +17,11 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en">
-      <body
-        className={`${poppins.variable} ${poppins.className}`}
-      >
-        {children}
+    <html lang="en" suppressHydrationWarning>
+      <body suppressHydrationWarning className={`${poppins.variable} ${poppins.className} bg-background text-foreground transition-colors duration-300`}>
+        <ThemeProvider attribute="class" defaultTheme="dark" enableSystem={false}>
+          {children}
+        </ThemeProvider>
       </body>
     </html>
   );

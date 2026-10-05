@@ -12,13 +12,10 @@ export default function ScrollProgress() {
   useEffect(() => {
     const bar = barRef.current
     if (!bar) return
-    const scroller = document.querySelector('[data-scroll-container]') || window
-
     gsap.set(bar, { scaleX: 0, transformOrigin: '0% 50%' })
     const st = ScrollTrigger.create({
-      scroller,
       start: 0,
-      end: () => (scroller === window ? document.body.scrollHeight - window.innerHeight : scroller.scrollHeight - scroller.clientHeight),
+      end: () => document.documentElement.scrollHeight - window.innerHeight,
       onUpdate: (self) => {
         gsap.to(bar, { scaleX: self.progress, duration: 0.1, ease: 'power1.out' })
       },

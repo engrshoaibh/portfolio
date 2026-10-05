@@ -1,19 +1,16 @@
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-@import 'locomotive-scroll/dist/locomotive-scroll.css';
-
 :root {
-  --background: #ffffff;
+  --background: #fafafa;
   --foreground: #171717;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+.dark {
+  --background: #212830;
+  --foreground: #ededed;
 }
 
 body {
@@ -22,40 +19,7 @@ body {
   font-family: Arial, Helvetica, sans-serif;
 }
 
-/* Locomotive Scroll required base fixes */
-html.has-scroll-smooth {
-  overflow: hidden;
-}
-.has-scroll-smooth body {
-  overflow: hidden;
-}
-.has-scroll-smooth [data-scroll-container] {
-  min-height: 100vh;
-}
-.c-scrollbar {
-  position: absolute;
-  right: 0;
-  top: 0;
-  width: 11px;
-  height: 100%;
-  transform-origin: center right;
-  transition: transform 0.3s, opacity 0.3s;
-  opacity: 0;
-}
-.c-scrollbar:hover,
-.has-scroll-scrolling .c-scrollbar,
-.has-scroll-dragging .c-scrollbar {
-  opacity: 1;
-}
-.c-scrollbar_thumb {
-  position: absolute;
-  top: 0;
-  right: 0;
-  background-color: rgba(255,255,255,0.5);
-  width: 7px;
-  border-radius: 10px;
-  margin: 2px;
-}
+
 ::selection {
 	background-color: #fb923c;
 	color: white; 

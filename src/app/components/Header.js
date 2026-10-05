@@ -3,22 +3,62 @@ import {Disclosure, DisclosurePanel, DisclosureButton } from '@headlessui/react'
 import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline'
 import Image from 'next/image'
 import logo from '../../../assets/logo.png'
+import { useTheme } from 'next-themes'
+import { FiSun, FiMoon } from 'react-icons/fi'
+import { useEffect, useState } from 'react'
 const navigation = [
     { name: 'About Me', href: '#about', current: true },
     { name: 'Projects', href: '#projects', current: false },
-    { name: 'Services', href: '#services', current: false },
     { name: 'Contact Me', href: '#contact', current: false },
 ]
 
 
 export default function Header() {
+    const { theme, setTheme } = useTheme();
+    const [mounted, setMounted] = useState(false);
+    const [isScrolled, setIsScrolled] = useState(false);
+    const [isVisible, setIsVisible] = useState(true);
+    const [lastScrollY, setLastScrollY] = useState(0);
+
+    useEffect(() => {
+        setMounted(true);
+        const handleScroll = () => {
+            const currentScrollY = window.scrollY;
+            
+            // Check if we're at the top
+            setIsScrolled(currentScrollY > 20);
+            
+            // Auto-hide logic: hide on scroll down, show on scroll up
+            if (currentScrollY > lastScrollY && currentScrollY > 100) {
+                setIsVisible(false);
+            } else {
+                setIsVisible(true);
+            }
+            
+            setLastScrollY(currentScrollY);
+        };
+
+        window.addEventListener('scroll', handleScroll, { passive: true });
+        return () => window.removeEventListener('scroll', handleScroll);
+    }, [lastScrollY]);
+
     return (
-        <Disclosure as="nav" className="sticky top-0 z-40 backdrop-blur supports-[backdrop-filter]:bg-black/30 bg-black/20"> 
-            <div className="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
-                <div className="relative flex h-16 items-center justify-between">
+        <Disclosure as="nav" className={`fixed w-full z-50 transition-all duration-300 ease-[cubic-bezier(0.4,0.3,0,1)] ${
+            isVisible ? 'translate-y-0' : '-translate-y-full'
+        } ${
+            isScrolled 
+                ? 'top-4' 
+                : 'top-0'
+        }`}> 
+            <div className={`mx-auto transition-all duration-300 ${isScrolled ? 'max-w-5xl px-4 sm:px-6' : 'max-w-7xl px-2 sm:px-6 lg:px-8'}`}>
+                <div className={`relative flex h-16 items-center justify-between transition-all duration-300 ${
+                    isScrolled 
+                        ? 'rounded-full backdrop-blur-xl bg-white/70 dark:bg-[#0a0a0a]/70 border border-gray-200/50 dark:border-white/10 shadow-[0_8px_32px_rgba(0,0,0,0.08)] px-6' 
+                        : 'bg-transparent border-transparent px-0'
+                }`}>
                     <div className="absolute inset-y-0 left-0 flex items-center sm:hidden">
                         {/* Mobile menu button */}
-                        <DisclosureButton className="group inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-gray-700 hover:text-white focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white">
+                        <DisclosureButton className="group inline-flex items-center justify-center rounded-md p-2 text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700 hover:text-gray-900 dark:hover:text-white focus:outline-none focus:ring-2 focus:ring-inset focus:ring-gray-900 dark:focus:ring-white">
                             <span className="sr-only">Open main menu</span>
                             <Bars3Icon className="block h-6 w-6 group-data-[open]:hidden" aria-hidden="true" />
                             <XMarkIcon className="hidden h-6 w-6 group-data-[open]:block" aria-hidden="true" />
@@ -43,7 +83,7 @@ export default function Header() {
                                 <a
                                     key={item.name}
                                     href={item.href}
-                                     className={`nav-link text-white/90 hover:text-orange-300 rounded-md px-3 py-2 text-sm font-medium`}
+                                     className={`nav-link text-gray-800 dark:text-white/90 hover:text-orange-500 dark:hover:text-orange-300 rounded-md px-3 py-2 text-sm font-medium transition-colors`}
                                      aria-label={item.name}
                                     aria-current={item.current ? 'page' : undefined}
                                 >
@@ -55,6 +95,15 @@ export default function Header() {
 
                     {/* Action Button */}
                     <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
+                        {mounted && (
+                            <button
+                                onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
+                                className="mr-4 p-2 rounded-full bg-gray-200 dark:bg-gray-800 text-gray-800 dark:text-gray-200 hover:bg-gray-300 dark:hover:bg-gray-700 transition-all duration-300"
+                                aria-label="Toggle Dark Mode"
+                            >
+                                {theme === 'dark' ? <FiSun size={20} /> : <FiMoon size={20} />}
+                            </button>
+                        )}
                         <button className="bg-gradient-to-r from-orange-400 via-orange-500 to-orange-600 text-white font-bold py-2 px-4 rounded-lg shadow-lg hover:from-orange-500 hover:via-orange-600 hover:to-orange-700 transition-all duration-300 ease-in-out"
                         
                         onClick={() => {
@@ -74,8 +123,8 @@ export default function Header() {
                             key={item.name}
                             as="a"
                             href={item.href}
-                            className={`block text-white hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium ${
-                                item.current ? 'bg-gray-900' : ''
+                            className={`block text-gray-800 dark:text-white hover:bg-gray-200 dark:hover:bg-gray-700 hover:text-gray-900 dark:hover:text-white rounded-md px-3 py-2 text-sm font-medium ${
+                                item.current ? 'bg-gray-200 dark:bg-gray-900' : ''
                             }`}
                             aria-current={item.current ? 'page' : undefined}
                         >
