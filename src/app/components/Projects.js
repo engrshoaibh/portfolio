@@ -9,13 +9,14 @@ import TextSplit from './TextSplit'
 import imgA from '../../../assets/325363351-baaf3e60-1b46-44da-9b34-6b5787100655.jpg'
 import imgB from '../../../assets/325364184-bd85ef15-b275-43f8-81ba-6cfeb7b47d6a.jpg'
 import imgC from '../../../assets/profileImage.jpg'
+import bulkBridgeImg from '../../../assets/bulkbridge-desktop.png'
 
 const PROJECTS = [
   {
     title: 'BulkBridge',
     description: 'Modern B2B wholesale marketplace connecting independent retailers directly with verified distributors, eliminating intermediaries for transparent pricing and seamless bulk ordering.',
     tags: ['React 19', 'Supabase', 'Tailwind'],
-    image: imgA,
+    image: bulkBridgeImg,
   },
   {
     title: "Brain Tumor & Alzheimer's Detection",
