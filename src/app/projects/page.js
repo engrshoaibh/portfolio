@@ -9,11 +9,19 @@ import imgC from '../../../assets/profileImage.jpg'
 
 const PROJECTS = [
   {
+    title: 'BulkBridge',
+    description: 'Modern B2B wholesale marketplace connecting independent retailers directly with verified distributors, eliminating intermediaries for transparent pricing and seamless bulk ordering.',
+    tags: ['React 19', 'Supabase', 'Tailwind'],
+    image: imgA,
+    span: 'md:col-span-2 md:row-span-2', // Large Feature
+    color: 'bg-emerald-900',
+  },
+  {
     title: "Brain Tumor & Alzheimer's Detection",
     description: 'Research project using deep learning for medical imaging. Achieved 98% accuracy in early stage detection.',
     tags: ['Python', 'TensorFlow', 'Research'],
     image: imgA,
-    span: 'md:col-span-2 md:row-span-2', // Large Feature
+    span: 'md:col-span-1 md:row-span-1', 
     color: 'bg-indigo-900',
   },
   {

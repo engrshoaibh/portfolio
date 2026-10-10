@@ -12,6 +12,12 @@ import imgC from '../../../assets/profileImage.jpg'
 
 const PROJECTS = [
   {
+    title: 'BulkBridge',
+    description: 'Modern B2B wholesale marketplace connecting independent retailers directly with verified distributors, eliminating intermediaries for transparent pricing and seamless bulk ordering.',
+    tags: ['React 19', 'Supabase', 'Tailwind'],
+    image: imgA,
+  },
+  {
     title: "Brain Tumor & Alzheimer's Detection",
     description: 'Research project using deep learning for medical imaging.',
     tags: ['Python', 'TensorFlow', 'Research'],
