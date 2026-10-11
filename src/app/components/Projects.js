@@ -6,10 +6,8 @@ import dynamic from 'next/dynamic'
 
 const PapertigerCards = dynamic(() => import('./PapertigerCards'), { ssr: false })
 import TextSplit from './TextSplit'
-import imgA from '../../../assets/325363351-baaf3e60-1b46-44da-9b34-6b5787100655.jpg'
-import imgB from '../../../assets/325364184-bd85ef15-b275-43f8-81ba-6cfeb7b47d6a.jpg'
-import imgC from '../../../assets/profileImage.jpg'
 import bulkBridgeImg from '../../../assets/bulkbridge-desktop.jpg'
+import adidasImg from '../../../assets/adidas-mockup.jpg'
 
 const PROJECTS = [
   {
@@ -24,7 +22,7 @@ const PROJECTS = [
     title: 'Adidas Landing Page',
     description: 'Pixel-perfect React clone of a WPBrigade landing page as part of a hiring test. Responsive design with polished animations and component architecture.',
     tags: ['React', 'Tailwind', 'Vite'],
-    image: imgB,
+    image: adidasImg,
     github: 'https://github.com/engrshoaibh/adidas',
     live: 'https://adidas-self-eight.vercel.app',
   },
