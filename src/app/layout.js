@@ -10,9 +10,27 @@ const poppins = Poppins({
 
 import { ThemeProvider } from "./components/ThemeProvider";
 
+const baseUrl =
+  process.env.NEXT_PUBLIC_SITE_URL ||
+  process.env.SITE_URL ||
+  (process.env.VERCEL_PROJECT_PRODUCTION_URL ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}` : null) ||
+  (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : null) ||
+  process.env.URL ||
+  'https://shoaibhassan.dev';
+
 export const metadata = {
+  metadataBase: new URL(baseUrl),
   title: "Shoaib Hassan | Full-Stack Engineer, AI Automation & Creative Media",
   description: "Software Engineer specializing in Next.js web applications, intelligent AI automations, UGC ad creatives, and digital listing media.",
+  icons: {
+    icon: [
+      { url: '/favicon.ico' },
+      { url: '/icon.png', type: 'image/png' },
+    ],
+    apple: [
+      { url: '/apple-icon.png' },
+    ],
+  },
   verification: {
     google: "CrclxNAp0WdPs-yRkRIrSTOSSQ-xqzxse5GSJhj0DsQ",
   },
