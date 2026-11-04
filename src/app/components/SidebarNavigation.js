@@ -9,8 +9,9 @@ const NAV_ITEMS = [
   {
     label: 'Sections',
     children: [
-      { value: '#about', label: 'About Me', icon: <FiUser size={16} /> },
-      { value: '#projects', label: 'Projects', icon: <FiCode size={16} /> },
+      { value: '#about', label: 'About', icon: <FiUser size={16} /> },
+      { value: '#projects', label: 'Work', icon: <FiCode size={16} /> },
+      { value: '#services', label: 'Services', icon: <FiBriefcase size={16} /> },
       { value: '#tech', label: 'Tech Stack', icon: <FiLayers size={16} /> },
       { value: '#contact', label: 'Contact', icon: <FiMail size={16} /> }
     ]

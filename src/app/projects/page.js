@@ -3,13 +3,23 @@ import { useState, useEffect } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useTheme } from 'next-themes'
-import { FiSun, FiMoon } from 'react-icons/fi'
+import { FiSun, FiMoon, FiMaximize2, FiX, FiExternalLink, FiGrid, FiColumns } from 'react-icons/fi'
 
 import SpotlightCard from '../components/SpotlightCard'
 import bulkBridgeImg from '../../../assets/bulkbridge-desktop.jpg'
 import adidasImg from '../../../assets/adidas-mockup.jpg'
+import shotFoxImg from '../../../assets/shotfox-mockup.jpg'
+import shotFoxScreenshot from '../../../assets/shotfox-screenshot.png'
 
 const PROJECTS = [
+  {
+    title: 'ShotFox',
+    description: 'SaaS platform that turns plain app screenshots into high-converting App Store & Google Play Store sets with custom templates, device frames, headlines, and all store-required export dimensions.',
+    tags: ['Next.js', 'React', 'Tailwind', 'SaaS'],
+    image: shotFoxImg,
+    screenshot: shotFoxScreenshot,
+    live: 'https://shotfox.site',
+  },
   {
     title: 'BulkBridge',
     description: 'Modern B2B wholesale marketplace connecting independent retailers directly with verified distributors. Eliminates intermediaries for transparent pricing and seamless bulk ordering.',
@@ -31,9 +41,21 @@ const PROJECTS = [
 export default function ProjectsPage() {
   const { setTheme, resolvedTheme } = useTheme()
   const [mounted, setMounted] = useState(false)
+  const [viewMode, setViewMode] = useState('large') // 'large' (2 columns) or 'compact' (3 columns)
+  const [selectedImage, setSelectedImage] = useState(null)
+  const [activeMediaTab, setActiveMediaTab] = useState({}) // { [projectIndex]: 'mockup' | 'screenshot' }
 
   useEffect(() => {
     setMounted(true)
+  }, [])
+
+  // Close lightbox on Escape key
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (e.key === 'Escape') setSelectedImage(null)
+    }
+    window.addEventListener('keydown', handleKeyDown)
+    return () => window.removeEventListener('keydown', handleKeyDown)
   }, [])
 
   const isLight = mounted && resolvedTheme === 'light'
@@ -61,15 +83,46 @@ export default function ProjectsPage() {
             <span>Back to Home</span>
           </Link>
 
-          {mounted && (
-            <button
-              onClick={() => setTheme(resolvedTheme === 'dark' ? 'light' : 'dark')}
-              className="p-2.5 rounded-full bg-white/80 dark:bg-zinc-900/80 backdrop-blur-md text-gray-800 dark:text-gray-200 hover:text-orange-600 dark:hover:text-orange-400 border border-gray-200/80 dark:border-white/10 shadow-sm transition-all duration-300 hover:scale-105 active:scale-95"
-              aria-label="Toggle theme"
-            >
-              {resolvedTheme === 'dark' ? <FiSun size={18} /> : <FiMoon size={18} />}
-            </button>
-          )}
+          <div className="flex items-center gap-3">
+            {/* View Mode Switcher */}
+            <div className="hidden sm:flex items-center bg-white/80 dark:bg-zinc-900/80 backdrop-blur-md p-1 rounded-full border border-gray-200/80 dark:border-white/10 shadow-sm">
+              <button
+                onClick={() => setViewMode('large')}
+                title="Large Showcase View (Higher Detail)"
+                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium transition-all ${
+                  viewMode === 'large'
+                    ? 'bg-orange-500 text-white shadow-sm'
+                    : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white'
+                }`}
+              >
+                <FiColumns size={13} />
+                <span>Showcase</span>
+              </button>
+              <button
+                onClick={() => setViewMode('compact')}
+                title="Compact Grid View"
+                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium transition-all ${
+                  viewMode === 'compact'
+                    ? 'bg-orange-500 text-white shadow-sm'
+                    : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white'
+                }`}
+              >
+                <FiGrid size={13} />
+                <span>Grid</span>
+              </button>
+            </div>
+
+            {/* Theme Toggle */}
+            {mounted && (
+              <button
+                onClick={() => setTheme(resolvedTheme === 'dark' ? 'light' : 'dark')}
+                className="p-2.5 rounded-full bg-white/80 dark:bg-zinc-900/80 backdrop-blur-md text-gray-800 dark:text-gray-200 hover:text-orange-600 dark:hover:text-orange-400 border border-gray-200/80 dark:border-white/10 shadow-sm transition-all duration-300 hover:scale-105 active:scale-95"
+                aria-label="Toggle theme"
+              >
+                {resolvedTheme === 'dark' ? <FiSun size={18} /> : <FiMoon size={18} />}
+              </button>
+            )}
+          </div>
         </div>
 
         {/* Header Title Section */}
@@ -85,92 +138,213 @@ export default function ProjectsPage() {
               All Projects
             </h1>
             <p className="text-gray-600 dark:text-gray-400 max-w-md text-xs sm:text-sm leading-relaxed">
-              A comprehensive showcase of production systems, developer tools, AI applications, and creative web experiments.
+              A comprehensive showcase of production systems, developer tools, AI applications, and creative web experiments. Click any image to view in full resolution.
             </p>
           </div>
         </div>
 
-        {/* Standard Grid of Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {PROJECTS.map((project, i) => (
-            <SpotlightCard
-              key={i}
-              className="group flex flex-col h-full w-full border border-gray-200/90 dark:border-white/10 rounded-2xl bg-white dark:bg-[#111111] shadow-[0_4px_20px_-4px_rgba(0,0,0,0.05)] hover:shadow-[0_12px_28px_-6px_rgba(249,115,22,0.14)] dark:hover:shadow-[0_20px_40px_-15px_rgba(0,0,0,0.7)] transition-all duration-300"
-              spotlightColor={isLight ? "rgba(249, 115, 22, 0.2)" : "rgba(255, 255, 255, 0.12)"}
-            >
-              {/* Image Portion */}
-              <div className="relative w-full aspect-[16/10] rounded-xl overflow-hidden mb-4 bg-slate-100 dark:bg-zinc-900/60 border border-gray-100 dark:border-white/5 flex-shrink-0">
-                <Image
-                  src={project.image}
-                  alt={project.title}
-                  fill
-                  className="object-cover object-top transition-transform duration-700 ease-[cubic-bezier(0.4,0.3,0,1)] group-hover:scale-105"
-                />
-              </div>
+        {/* Dynamic Grid: Large 2-column Showcase or 3-column Compact */}
+        <div
+          className={`grid gap-8 transition-all duration-300 ${
+            viewMode === 'large'
+              ? 'grid-cols-1 lg:grid-cols-2'
+              : 'grid-cols-1 md:grid-cols-2 lg:grid-cols-3'
+          }`}
+        >
+          {PROJECTS.map((project, i) => {
+            const hasScreenshot = Boolean(project.screenshot)
+            const currentTab = activeMediaTab[i] || 'mockup'
+            const currentImage = (currentTab === 'screenshot' && project.screenshot) ? project.screenshot : project.image
 
-              {/* Content Portion */}
-              <div className="flex flex-col flex-grow">
-                {/* Tags */}
-                <div className="flex flex-wrap gap-1.5 mb-3">
-                  {project.tags.map(tag => (
-                    <span
-                      key={tag}
-                      className="px-2 py-0.5 text-[10px] sm:text-[11px] font-medium tracking-wide text-orange-700 dark:text-orange-300 bg-orange-50/90 dark:bg-orange-500/10 rounded-md border border-orange-200/70 dark:border-orange-500/20"
+            return (
+              <SpotlightCard
+                key={i}
+                className="group flex flex-col h-full w-full border border-gray-200/90 dark:border-white/10 rounded-2xl bg-white dark:bg-[#111111] shadow-[0_4px_20px_-4px_rgba(0,0,0,0.05)] hover:shadow-[0_12px_28px_-6px_rgba(249,115,22,0.14)] dark:hover:shadow-[0_20px_40px_-15px_rgba(0,0,0,0.7)] transition-all duration-300 p-5 sm:p-6"
+                spotlightColor={isLight ? "rgba(249, 115, 22, 0.2)" : "rgba(255, 255, 255, 0.12)"}
+              >
+                {/* Image Showcase Container with exact 16/9 aspect ratio */}
+                <div className="relative w-full aspect-[16/9] rounded-xl overflow-hidden mb-5 bg-slate-900 border border-gray-200/60 dark:border-white/10 flex-shrink-0 group/img">
+                  <Image
+                    src={currentImage}
+                    alt={project.title}
+                    fill
+                    quality={95}
+                    priority={i === 0}
+                    sizes={viewMode === 'large' ? "(max-width: 1024px) 100vw, 640px" : "(max-width: 768px) 100vw, 400px"}
+                    className="object-cover object-center transition-transform duration-700 ease-[cubic-bezier(0.4,0.3,0,1)] group-hover/img:scale-105 select-none"
+                  />
+
+                  {/* Top Overlay Bar: Mockup / Screenshot Tabs (if available) & Fullscreen button */}
+                  <div className="absolute inset-x-0 top-0 p-3 flex items-center justify-between pointer-events-auto bg-gradient-to-b from-black/60 via-black/20 to-transparent">
+                    {hasScreenshot ? (
+                      <div className="inline-flex items-center p-0.5 rounded-lg bg-black/60 backdrop-blur-md border border-white/15 text-[11px] font-medium text-white shadow-sm">
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation()
+                            setActiveMediaTab(prev => ({ ...prev, [i]: 'mockup' }))
+                          }}
+                          className={`px-2.5 py-1 rounded-md transition-colors ${
+                            currentTab === 'mockup'
+                              ? 'bg-orange-500 text-white font-semibold'
+                              : 'text-gray-300 hover:text-white'
+                          }`}
+                        >
+                          Mockup
+                        </button>
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation()
+                            setActiveMediaTab(prev => ({ ...prev, [i]: 'screenshot' }))
+                          }}
+                          className={`px-2.5 py-1 rounded-md transition-colors ${
+                            currentTab === 'screenshot'
+                              ? 'bg-orange-500 text-white font-semibold'
+                              : 'text-gray-300 hover:text-white'
+                          }`}
+                        >
+                          Screenshot
+                        </button>
+                      </div>
+                    ) : <span />}
+
+                    {/* Expand / Lightbox Trigger */}
+                    <button
+                      onClick={() => setSelectedImage({
+                        src: currentImage,
+                        title: project.title,
+                        type: currentTab,
+                        live: project.live,
+                      })}
+                      title="View full resolution"
+                      className="p-1.5 rounded-lg bg-black/60 hover:bg-black/90 backdrop-blur-md border border-white/15 text-white/90 hover:text-white hover:scale-105 active:scale-95 transition-all shadow-sm"
                     >
-                      {tag}
-                    </span>
-                  ))}
+                      <FiMaximize2 size={14} />
+                    </button>
+                  </div>
                 </div>
 
-                {/* Title */}
-                <h2 className="text-base sm:text-lg font-bold text-gray-900 dark:text-white mb-2 leading-snug group-hover:text-orange-600 dark:group-hover:text-orange-400 transition-colors">
-                  {project.title}
-                </h2>
+                {/* Content Portion */}
+                <div className="flex flex-col flex-grow">
+                  {/* Tags */}
+                  <div className="flex flex-wrap gap-1.5 mb-3">
+                    {project.tags.map(tag => (
+                      <span
+                        key={tag}
+                        className="px-2.5 py-0.5 text-[11px] font-medium tracking-wide text-orange-700 dark:text-orange-300 bg-orange-50/90 dark:bg-orange-500/10 rounded-md border border-orange-200/70 dark:border-orange-500/20"
+                      >
+                        {tag}
+                      </span>
+                    ))}
+                  </div>
 
-                {/* Description */}
-                <p className="text-xs sm:text-[13px] text-gray-600 dark:text-gray-400 leading-relaxed mb-4 flex-grow line-clamp-3">
-                  {project.description}
-                </p>
+                  {/* Title */}
+                  <h2 className="text-lg sm:text-xl font-bold text-gray-900 dark:text-white mb-2 leading-snug group-hover:text-orange-600 dark:group-hover:text-orange-400 transition-colors">
+                    {project.title}
+                  </h2>
 
-                {/* Links */}
-                <div className="mt-auto pt-3 border-t border-gray-100 dark:border-white/5 flex items-center gap-3">
-                  {project.github && (
-                    <a
-                      href={project.github}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="flex items-center gap-1.5 text-xs font-semibold text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white bg-gray-100/80 dark:bg-white/5 hover:bg-gray-200 dark:hover:bg-white/10 px-3 py-1.5 rounded-lg border border-gray-200 dark:border-white/10 transition-all duration-200"
-                    >
-                      <svg viewBox="0 0 24 24" className="w-3.5 h-3.5" fill="currentColor">
-                        <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
-                      </svg>
-                      GitHub
-                    </a>
-                  )}
-                  {project.live ? (
-                    <a
-                      href={project.live}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="flex items-center gap-1.5 text-xs font-semibold text-white bg-orange-500 hover:bg-orange-600 px-3 py-1.5 rounded-lg transition-all duration-200 shadow-sm hover:shadow-orange-500/30 hover:shadow-md"
-                    >
-                      <svg viewBox="0 0 24 24" className="w-3.5 h-3.5" fill="none" stroke="currentColor" strokeWidth="2.5">
-                        <path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3"/>
-                      </svg>
-                      Live Demo
-                    </a>
-                  ) : (
-                    <span className="ml-auto flex items-center gap-1 text-xs text-gray-400 dark:text-gray-600 italic">
-                      <svg viewBox="0 0 24 24" className="w-3 h-3" fill="none" stroke="currentColor" strokeWidth="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
-                      No live preview
-                    </span>
-                  )}
+                  {/* Description */}
+                  <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-400 leading-relaxed mb-6 flex-grow">
+                    {project.description}
+                  </p>
+
+                  {/* Links */}
+                  <div className="mt-auto pt-4 border-t border-gray-100 dark:border-white/5 flex items-center gap-3">
+                    {project.github && (
+                      <a
+                        href={project.github}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="flex items-center gap-1.5 text-xs font-semibold text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white bg-gray-100/80 dark:bg-white/5 hover:bg-gray-200 dark:hover:bg-white/10 px-3.5 py-2 rounded-lg border border-gray-200 dark:border-white/10 transition-all duration-200"
+                      >
+                        <svg viewBox="0 0 24 24" className="w-3.5 h-3.5" fill="currentColor">
+                          <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+                        </svg>
+                        GitHub
+                      </a>
+                    )}
+                    {project.live ? (
+                      <a
+                        href={project.live}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="flex items-center gap-1.5 text-xs font-semibold text-white bg-orange-500 hover:bg-orange-600 px-4 py-2 rounded-lg transition-all duration-200 shadow-sm hover:shadow-orange-500/30 hover:shadow-md"
+                      >
+                        <FiExternalLink size={13} />
+                        Live Demo
+                      </a>
+                    ) : (
+                      <span className="ml-auto flex items-center gap-1 text-xs text-gray-400 dark:text-gray-600 italic">
+                        No live preview
+                      </span>
+                    )}
+                  </div>
                 </div>
-              </div>
-            </SpotlightCard>
-          ))}
+              </SpotlightCard>
+            )
+          })}
         </div>
       </main>
+
+      {/* High-Resolution Fullscreen Lightbox Modal */}
+      {selectedImage && (
+        <div
+          role="dialog"
+          aria-modal="true"
+          onClick={() => setSelectedImage(null)}
+          className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-8 bg-black/85 backdrop-blur-md animate-in fade-in duration-200"
+        >
+          <div
+            onClick={(e) => e.stopPropagation()}
+            className="relative max-w-6xl w-full bg-zinc-950 border border-white/10 rounded-2xl overflow-hidden shadow-2xl flex flex-col max-h-[92vh]"
+          >
+            {/* Modal Header */}
+            <div className="flex items-center justify-between px-6 py-4 border-b border-white/10 bg-zinc-900/60">
+              <div className="flex items-center gap-3">
+                <h3 className="text-base sm:text-lg font-bold text-white">
+                  {selectedImage.title}
+                </h3>
+                <span className="text-[11px] uppercase tracking-wider px-2 py-0.5 rounded bg-orange-500/20 text-orange-400 border border-orange-500/30">
+                  {selectedImage.type === 'screenshot' ? 'Full Website Screenshot' : '3D Device Mockup'}
+                </span>
+              </div>
+              <div className="flex items-center gap-3">
+                {selectedImage.live && (
+                  <a
+                    href={selectedImage.live}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1.5 text-xs font-semibold text-white bg-orange-500 hover:bg-orange-600 px-3 py-1.5 rounded-lg transition-colors"
+                  >
+                    <FiExternalLink size={12} />
+                    <span>Open Site</span>
+                  </a>
+                )}
+                <button
+                  onClick={() => setSelectedImage(null)}
+                  className="p-1.5 rounded-lg text-gray-400 hover:text-white hover:bg-white/10 transition-colors"
+                  aria-label="Close modal"
+                >
+                  <FiX size={20} />
+                </button>
+              </div>
+            </div>
+
+            {/* Modal Image Body with native full high-resolution rendering */}
+            <div className="relative w-full flex-grow overflow-auto p-4 flex items-center justify-center bg-black/40">
+              <div className="relative w-full max-w-5xl aspect-[16/9] rounded-lg overflow-hidden border border-white/10 shadow-lg">
+                <Image
+                  src={selectedImage.src}
+                  alt={selectedImage.title}
+                  fill
+                  quality={100}
+                  unoptimized
+                  className="object-contain"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   )
 }

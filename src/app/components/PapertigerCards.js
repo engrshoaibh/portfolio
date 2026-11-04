@@ -12,15 +12,26 @@ export default function PapertigerCards({ projects }) {
   const cardsRef = useRef([])
   const [hoveredIndex, setHoveredIndex] = useState(null)
 
-  // Fan-out parameters for exactly 6 cards (matching papertiger.com)
-  const spread = [
-    { rotate: -12, x: -494, y: 50 },
-    { rotate: -8, x: -317, y: 20 },
-    { rotate: -4, x: -134, y: 5 },
-    { rotate: 4, x: 32, y: 5 },
-    { rotate: 8, x: 199, y: 20 },
-    { rotate: 12, x: 377, y: 50 },
-  ]
+  // Dynamic fan-out parameters based on number of projects so cards are always centered
+  const getSpread = (i, total) => {
+    if (total <= 1) return { rotate: 0, x: 0, y: 0 }
+    if (total === 2) {
+      return i === 0 
+        ? { rotate: -6, x: -170, y: 15 } 
+        : { rotate: 6, x: 170, y: 15 }
+    }
+    if (total === 3) {
+      if (i === 0) return { rotate: -8, x: -280, y: 20 }
+      if (i === 1) return { rotate: 0, x: 0, y: 0 }
+      return { rotate: 8, x: 280, y: 20 }
+    }
+    const progress = (i / (total - 1)) * 2 - 1
+    return {
+      rotate: Math.round(progress * 12),
+      x: Math.round(progress * 440),
+      y: Math.round(Math.abs(progress) * 45),
+    }
+  }
 
   useEffect(() => {
     const ctx = gsap.context(() => {
@@ -39,11 +50,12 @@ export default function PapertigerCards({ projects }) {
         start: 'top 75%', // trigger when top of container is 75% down viewport
         onEnter: () => {
           cardsRef.current.forEach((card, i) => {
+            const sp = getSpread(i, projects.length)
             gsap.to(card, {
               opacity: 1,
-              y: spread[i]?.y || 0,
-              x: spread[i]?.x || 0,
-              rotation: spread[i]?.rotate || 0,
+              y: sp.y,
+              x: sp.x,
+              rotation: sp.rotate,
               scale: 1,
               duration: 1.4,
               ease: 'power3.out',
@@ -55,13 +67,14 @@ export default function PapertigerCards({ projects }) {
     }, containerRef)
 
     return () => ctx.revert()
-  }, [])
+  }, [projects.length])
 
   const handleMouseEnter = (i) => {
     setHoveredIndex(i)
+    const sp = getSpread(i, projects.length)
     // Elevate hovered card without scaling, matching papertiger's pronounced lift
     gsap.to(cardsRef.current[i], {
-      y: (spread[i]?.y || 0) - 60, // pull up out of the deck
+      y: sp.y - 60, // pull up out of the deck
       zIndex: 50,
       duration: 0.6,
       ease: 'power3.out',
@@ -70,7 +83,6 @@ export default function PapertigerCards({ projects }) {
     })
 
     // Dim other cards using brightness instead of opacity
-    // Opacity causes a washout glitch on light backgrounds!
     cardsRef.current.forEach((card, index) => {
       if (index !== i) {
         gsap.to(card, {
@@ -84,9 +96,10 @@ export default function PapertigerCards({ projects }) {
 
   const handleMouseLeave = (i) => {
     setHoveredIndex(null)
+    const sp = getSpread(i, projects.length)
     // Return card to normal
     gsap.to(cardsRef.current[i], {
-      y: spread[i]?.y || 0,
+      y: sp.y,
       zIndex: 10 + i,
       duration: 0.6,
       ease: 'power3.out',
@@ -103,6 +116,13 @@ export default function PapertigerCards({ projects }) {
     })
   }
 
+  const handleCardClick = (p) => {
+    const targetUrl = p.live || p.github
+    if (targetUrl) {
+      window.open(targetUrl, '_blank', 'noopener,noreferrer')
+    }
+  }
+
   return (
     <div ref={containerRef} className="relative w-full py-16 flex flex-col items-center overflow-visible">
       {/* Cards Fan */}
@@ -113,21 +133,22 @@ export default function PapertigerCards({ projects }) {
             ref={(el) => (cardsRef.current[i] = el)}
             onMouseEnter={() => handleMouseEnter(i)}
             onMouseLeave={() => handleMouseLeave(i)}
+            onClick={() => handleCardClick(p)}
             style={{ 
               zIndex: 10 + i,
               boxShadow: '0 10px 30px -10px rgba(0,0,0,0.3)'
             }}
-            className="absolute top-0 left-1/2 -ml-[160px] w-[320px] h-[450px] rounded-xl overflow-hidden cursor-pointer will-change-transform bg-gray-200 dark:bg-gray-800 border border-white/10"
+            className="absolute top-0 left-1/2 -ml-[160px] w-[320px] h-[450px] rounded-xl overflow-hidden cursor-pointer will-change-transform bg-gray-200 dark:bg-gray-800 border border-white/10 group transition-shadow"
           >
             <Image
               src={p.image?.src || p.image}
               alt={p.title}
               fill
-              className="object-cover pointer-events-none select-none"
+              className="object-cover pointer-events-none select-none transition-transform duration-500 group-hover:scale-105"
               sizes="320px"
               priority={i < 3}
             />
-            {/* Subtle gradient overlay to mimic the dark mood of papertiger */}
+            {/* Subtle gradient overlay */}
             <div className="absolute inset-0 bg-gradient-to-b from-transparent to-black/60 opacity-20 pointer-events-none" />
           </div>
         ))}
@@ -135,9 +156,25 @@ export default function PapertigerCards({ projects }) {
 
       {/* Dynamic Title */}
       <div className="h-16 flex items-center justify-center w-full px-6 text-center">
-        <h3 className={`text-4xl md:text-5xl font-bold font-poppins text-gray-900 dark:text-white transition-all duration-300 ${hoveredIndex !== null ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
-          {hoveredIndex !== null ? projects[hoveredIndex].title : ""}
-        </h3>
+        {hoveredIndex !== null && projects[hoveredIndex] ? (
+          <a
+            href={projects[hoveredIndex].live || projects[hoveredIndex].github || '#'}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="group inline-flex items-center gap-3 transition-transform hover:scale-105 cursor-pointer"
+          >
+            <h3 className="text-4xl md:text-5xl font-bold font-poppins text-gray-900 dark:text-white transition-colors duration-300 group-hover:text-orange-500">
+              {projects[hoveredIndex].title}
+            </h3>
+            <svg className="w-5 h-5 text-orange-500 opacity-80 group-hover:opacity-100 transition-opacity" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+              <path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3"/>
+            </svg>
+          </a>
+        ) : (
+          <span className="text-sm uppercase tracking-widest text-gray-400 dark:text-gray-500">
+            Hover a project to preview
+          </span>
+        )}
       </div>
     </div>
   )
